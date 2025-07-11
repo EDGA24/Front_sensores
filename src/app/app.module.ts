@@ -1,46 +1,57 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
-
-import { environment } from '../environments/environment';
-import { SensorViewModule } from './sensors/sensor-view/sensor-view.module';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { RegisteDashboardModule } from './admin/features/registe-dashboard/registe-dashboard.module';
-import { LoginModule } from './LoginUser/login.module';
-import { LandingModule } from './landing/landing.module';
-import { Sensor3Module } from './sensors/sensor3/sensor3.module';
-import { Sensor4Module } from './sensors/sensor4/sensor4.module';
-
-import { AlertContainerComponent } from './shared/alert-container/alert-container.component';
+const routes: Routes = [
+  // Ruta pública
+  { 
+    path: 'login', 
+    component: LoginZNComponent,
+    data: { title: 'Iniciar Sesión' }
+  },
+  
+  // Rutas protegidas
+  { 
+    path: 'dashboard', 
+    component: RegisteDashboardComponent,
+    canActivate: [AuthGuard],
+    data: { title: 'Dashboard', roles: ['user', 'admin'] }
+  },
+  { 
+    path: 'sensor-monitor', 
+    component: Sensor1DisplayComponent,
+    canActivate: [AuthGuard],
+    data: { title: 'Monitor de Sensores', roles: ['user', 'admin'] }
+  },
+  
+  
+  // Redirecciones
+  { 
+    path: '', 
+    redirectTo: '/dashboard', 
+    pathMatch: 'full' 
+  },
+  
+  
+  // Wildcard route - debe ir al final
+  { 
+    path: '**', 
+    redirectTo: '/404' 
+  }
+];
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    CommonModule,  
-    HttpClientModule,
-    AppRoutingModule,
-    SensorViewModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireMessagingModule,
-    NavbarComponent,
-    RegisteDashboardModule,
-    LoginModule,
-    Sensor4Module,
-    Sensor3Module,
-    LandingModule,
-    AlertContainerComponent
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports: [RouterModule.forRoot(routes, {
+    enableTracing: false, // Cambiar a true para debugging
+    preloadingStrategy: PreloadAllModules,
+    scrollPositionRestoration: 'top'
+  })],
+  exports: [RouterModule]
 })
-export class AppModule { }
+export class AppRoutingModule { }
+
+// Importaciones adicionales para la preloading strategy
+import { PreloadAllModules } from '@angular/router';
+import { LoginZNComponent } from './LoginUser/login-zn/login-zn.component';import { RegisteDashboardComponent } from './admin/features/registe-dashboard/registe-dashboard.component';
+import { Sensor1DisplayComponent } from './sensors/sensor1/sensor1-display/sensor1-display.component';
+
