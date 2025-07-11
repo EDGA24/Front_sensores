@@ -31,6 +31,12 @@ export class RegisterZNComponent {
 
   register() {
     // Se registra el usuario utilizando el servicio de autenticación
+    // Se verifica que el folio no esté vacío
+    if (!this.folio ) {
+      this.errorMessage = 'Por favor, completa todos los campos.';
+      return;
+    }
+
     var success = this.authService.registerUser(this.folio, this.name, this.email, this.password)
     if (success) {
       // Si el registro es exitoso, se muestra un mensaje de éxito
