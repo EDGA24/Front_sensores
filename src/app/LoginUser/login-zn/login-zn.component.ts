@@ -26,10 +26,11 @@ export class LoginZNComponent {
   folio: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   login() {
-    if (this.authService.loginUser(this.email, this.password, this.folio)) {
+    const loginResult = this.authService.loginUser(this.email, this.password, this.folio);
+    if (loginResult) {
       if (this.authService.isAdminLoggedIn()) {
         this.router.navigate(['/dashboard']);
       } else if (this.authService.isUserLoggedIn()) {
@@ -41,4 +42,5 @@ export class LoginZNComponent {
       this.errorMessage = 'Correo, contraseña o folio inválidos.';
     }
   }
+
 }
