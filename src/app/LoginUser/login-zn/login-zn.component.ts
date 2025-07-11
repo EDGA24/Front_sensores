@@ -29,6 +29,7 @@ export class LoginZNComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
+    // Si hay persistyencia de sesión, se redirige al usuario
     if (this.authService.loginUser(this.email, this.password, this.folio)) {
       if (this.authService.isAdminLoggedIn()) {
         this.router.navigate(['/dashboard']);
