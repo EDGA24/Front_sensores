@@ -37,6 +37,12 @@ export class RegisterZNComponent {
       return;
     }
 
+    // se verifica que la contraseña tenga al menos 6 caracteres
+    if (this.password.length < 6) {
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
+
     var success = this.authService.registerUser(this.folio, this.name, this.email, this.password)
     if (success) {
       // Si el registro es exitoso, se muestra un mensaje de éxito
