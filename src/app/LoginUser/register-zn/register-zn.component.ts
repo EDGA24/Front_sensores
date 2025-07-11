@@ -32,7 +32,7 @@ export class RegisterZNComponent {
   register() {
     // Se registra el usuario utilizando el servicio de autenticación
     // Se verifica que el folio no esté vacío
-    if (!this.folio ) {
+    if (!this.folio || !this.name ) {
       this.errorMessage = 'Por favor, completa todos los campos.';
       return;
     }
