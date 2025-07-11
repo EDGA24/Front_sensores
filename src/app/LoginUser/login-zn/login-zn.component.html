@@ -3,18 +3,69 @@
     <div class="form-structor">
       <div class="login">
         <div class="center">
+
           <h2 class="form-title" id="login"><span>or</span>Iniciar Sesión</h2>
-          <div class="form-holder">
-            <input type="email" class="input" placeholder="Correo Electrónico" [(ngModel)]="email" name="email" required />
-            <input type="password" class="input" placeholder="Contraseña" [(ngModel)]="password" name="password" required />
-            <input type="text" class="input" placeholder="Folio" [(ngModel)]="folio" name="folio" required />
-          </div>
-          <button type="submit" class="submit-btn" (click)="login()">Iniciar Sesión</button>
-          <a routerLink="/register" class="link">Registrarse</a>
+
+          <form #loginForm="ngForm" (ngSubmit)="login()" novalidate>
+            <div class="form-holder">
+
+              <input
+                type="email"
+                class="input"
+                placeholder="Correo Electrónico"
+                [(ngModel)]="email"
+                name="email"
+                required
+                email
+                #emailInput="ngModel"
+              />
+              <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="error-message">
+                <div *ngIf="emailInput.errors?.['required']">FE-LOG-005: El correo es obligatorio.</div>
+                <div *ngIf="emailInput.errors?.['email']">FE-LOG-002: Formato de correo inválido.</div>
+              </div>
+
+              <input
+                type="password"
+                class="input"
+                placeholder="Contraseña"
+                [(ngModel)]="password"
+                name="password"
+                required
+                minlength="8"
+                pattern="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
+                #passwordInput="ngModel"
+              />
+              <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="error-message">
+                <div *ngIf="passwordInput.errors?.['required']">FE-LOG-006: La contraseña es obligatoria.</div>
+                <div *ngIf="passwordInput.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres.</div>
+                <div *ngIf="passwordInput.errors?.['pattern']">La contraseña debe contener al menos una letra y un número.</div>
+              </div>
+
+              <input
+                type="text"
+                class="input"
+                placeholder="Folio"
+                [(ngModel)]="folio"
+                name="folio"
+                required
+                #folioInput="ngModel"
+              />
+              <div *ngIf="folioInput.invalid && (folioInput.dirty || folioInput.touched)" class="error-message">
+                <div *ngIf="folioInput.errors?.['required']">FE-LOG-004: El folio es obligatorio.</div>
+              </div>
+
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="loginForm.invalid">Iniciar Sesión</button>
+          </form>
+
+          <button class="forgot-password-btn" (click)="forgotPassword()">Olvidé mi contraseña</button>
+
           <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+          <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+          
         </div>
       </div>
     </div>
   </div>
 </div>
-
