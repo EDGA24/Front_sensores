@@ -13,9 +13,13 @@ export class AuthService {
   }
 
   registerUser(folio: string, name: string, email: string, password: string): boolean {
+    // Se obtiene el folio del localStorage
     const storedFolio = localStorage.getItem('folio');
+    // Verifica si el folio esta en localStorage
     if (storedFolio && storedFolio === folio) {
+      // Si el folio es válido, se registra el usuario
       console.log('Usuario registrado:', { name, email, password, folio });
+      // se almacenan los datos del usuario en localStorage
       localStorage.setItem('email', email);
       localStorage.setItem('password', password);
       localStorage.setItem('folio', folio);

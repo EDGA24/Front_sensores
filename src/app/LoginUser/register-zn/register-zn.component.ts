@@ -30,9 +30,13 @@ export class RegisterZNComponent {
   constructor(private authService: AuthService) {}
 
   register() {
-    if (this.authService.registerUser(this.folio, this.name, this.email, this.password)) {
+    // Se registra el usuario utilizando el servicio de autenticación
+    var success = this.authService.registerUser(this.folio, this.name, this.email, this.password)
+    if (success) {
+      // Si el registro es exitoso, se muestra un mensaje de éxito
       alert('Registro exitoso. Ahora puedes iniciar sesión.');
     } else {
+      //
       this.errorMessage = 'Folio inválido. No puedes registrarte sin un folio válido.';
     }
   }
