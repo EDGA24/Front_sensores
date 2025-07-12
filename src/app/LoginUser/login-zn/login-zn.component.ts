@@ -25,21 +25,65 @@ export class LoginZNComponent {
   password: string = '';
   folio: string = '';
   errorMessage: string = '';
+  successMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   login() {
-    // Si hay persistyencia de sesión, se redirige al usuario
-    if (this.authService.loginUser(this.email, this.password, this.folio)) {
-      if (this.authService.isAdminLoggedIn()) {
-        this.router.navigate(['/dashboard']);
-      } else if (this.authService.isUserLoggedIn()) {
-        this.router.navigate(['/sensorView']);
-      } else {
-        alert('Inicio de sesión exitoso.');
-      }
-    } else {
-      this.errorMessage = 'Correo, contraseña o folio inválidos.';
+    this.clearMessages();
+    
+    // Validaciones de campos vacíos (FE-LOG-004, 005, 006)
+    if (!this.email && !this.password && !this.folio) {
+      this.errorMessage = 'FE-LOG-004: Por favor completa todos los campos.';
+      return;
     }
+    if (!this.email) {
+      this.errorMessage = 'FE-LOG-005: El campo correo está vacío.';
+      return;
+    }
+    if (!this.password) {
+      this.errorMessage = 'FE-LOG-006: El campo contraseña está vacío.';
+      return;
+    }
+    if (!this.folio) {
+      this.errorMessage = 'FE-LOG-004: El campo folio está vacío.';
+      return;
+    }
+
+    // Intento de login con manejo de códigos de respuesta específicos
+    const loginResult = String(this.authService.loginUser(this.email, this.password, this.folio));
+    
+    switch (loginResult) {
+      case 'SUCCESS':
+        this.successMessage = 'FE-LOG-001: Login exitoso.';
+        if (this.authService.isAdminLoggedIn()) {
+          this.router.navigate(['/dashboard']);
+        } else if (this.authService.isUserLoggedIn()) {
+          this.router.navigate(['/sensorView']);
+        }
+        break;
+      case 'USER_NOT_FOUND':
+        this.errorMessage = 'FE-LOG-002: Usuario inexistente.';
+        break;
+      case 'WRONG_PASSWORD':
+        this.errorMessage = 'FE-LOG-003: Contraseña incorrecta.';
+        break;
+      case 'USER_BLOCKED':
+        this.errorMessage = 'FE-LOG-007: Usuario bloqueado o inactivo.';
+        break;
+      default:
+        this.errorMessage = 'Error desconocido durante el inicio de sesión.';
+        break;
+    }
+  }
+
+  forgotPassword() {
+    // Funcionalidad para recuperar contraseña
+    alert('FE-LOG-008: Funcionalidad de "Olvidé mi contraseña" no implementada aún.');
+  }
+
+  private clearMessages() {
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 }
