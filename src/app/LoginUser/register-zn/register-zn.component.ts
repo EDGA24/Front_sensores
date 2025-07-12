@@ -30,9 +30,25 @@ export class RegisterZNComponent {
   constructor(private authService: AuthService) {}
 
   register() {
-    if (this.authService.registerUser(this.folio, this.name, this.email, this.password)) {
+    // Se registra el usuario utilizando el servicio de autenticación
+    // Se verifica que el folio no esté vacío
+    if (!this.folio || !this.name || !this.email) {
+      this.errorMessage = 'Por favor, completa todos los campos.';
+      return;
+    }
+
+    // se verifica que la contraseña tenga al menos 6 caracteres
+    if (this.password.length < 6) {
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
+
+    var success = this.authService.registerUser(this.folio, this.name, this.email, this.password)
+    if (success) {
+      // Si el registro es exitoso, se muestra un mensaje de éxito
       alert('Registro exitoso. Ahora puedes iniciar sesión.');
     } else {
+      //
       this.errorMessage = 'Folio inválido. No puedes registrarte sin un folio válido.';
     }
   }

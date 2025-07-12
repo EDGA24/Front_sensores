@@ -24,7 +24,6 @@ export class LoginZNComponent {
   email: string = '';
   password: string = '';
   folio: string = '';
-
   errorMessage: string = '';
   successMessage: string = '';
 
@@ -32,8 +31,8 @@ export class LoginZNComponent {
 
   login() {
     this.clearMessages();
-
-    // Chequeo básico extra (FE-LOG-004, 005, 006)
+    
+    // Validaciones de campos vacíos (FE-LOG-004, 005, 006)
     if (!this.email && !this.password && !this.folio) {
       this.errorMessage = 'FE-LOG-004: Por favor completa todos los campos.';
       return;
@@ -51,10 +50,9 @@ export class LoginZNComponent {
       return;
     }
 
-    // Aquí debes adaptar este loginUser para que retorne códigos de error específicos:
-    // Por ejemplo: 'SUCCESS', 'USER_NOT_FOUND', 'WRONG_PASSWORD', 'USER_BLOCKED'
+    // Intento de login con manejo de códigos de respuesta específicos
     const loginResult = String(this.authService.loginUser(this.email, this.password, this.folio));
-
+    
     switch (loginResult) {
       case 'SUCCESS':
         this.successMessage = 'FE-LOG-001: Login exitoso.';
@@ -64,19 +62,15 @@ export class LoginZNComponent {
           this.router.navigate(['/sensorView']);
         }
         break;
-
       case 'USER_NOT_FOUND':
         this.errorMessage = 'FE-LOG-002: Usuario inexistente.';
         break;
-
       case 'WRONG_PASSWORD':
         this.errorMessage = 'FE-LOG-003: Contraseña incorrecta.';
         break;
-
       case 'USER_BLOCKED':
         this.errorMessage = 'FE-LOG-007: Usuario bloqueado o inactivo.';
         break;
-
       default:
         this.errorMessage = 'Error desconocido durante el inicio de sesión.';
         break;
@@ -84,7 +78,7 @@ export class LoginZNComponent {
   }
 
   forgotPassword() {
-    // Aquí puedes implementar la lógica o redireccionar a una página para recuperar contraseña
+    // Funcionalidad para recuperar contraseña
     alert('FE-LOG-008: Funcionalidad de "Olvidé mi contraseña" no implementada aún.');
   }
 
