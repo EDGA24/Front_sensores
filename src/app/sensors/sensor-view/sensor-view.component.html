@@ -1,4 +1,18 @@
-<div class="content-wrapper">
+<div class="nav-bar">
+  <button mat-button (click)="goToDashboard()">Dashboard</button>
+
+  <button mat-button [matMenuTriggerFor]="menu">Menú</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+  </mat-menu>
+</div>
+
+<div class="loading-indicator" *ngIf="isLoading">
+  <mat-spinner diameter="40"></mat-spinner> <!-- Spinner Material -->
+  <span>Cargando datos...</span>
+</div>
+
+<div class="content-wrapper" *ngIf="!isLoading">
   <section>
     <div class="example-label">
       Monitoreo de la biblioteca
@@ -10,8 +24,8 @@
             Ruido
           </button>
         </div>
-        <div class="example-button-container" routerLink="/sensorTemperature">
-          <button mat-fab extended>
+        <div class="example-button-container">
+          <button mat-fab extended routerLink="/sensorTemperature">
             <span class="material-symbols-outlined">device_thermostat</span>
             Temperatura de la biblioteca
           </button>
@@ -24,7 +38,7 @@
         </div>
         <div class="example-button-container">
           <button mat-fab extended routerLink="/sensorAirPurity">
-            <span class="material-symbols-outlined" > airwave </span>
+            <span class="material-symbols-outlined"> airwave </span>
             Nivel de pureza del aire de la biblioteca
           </button>
         </div>
